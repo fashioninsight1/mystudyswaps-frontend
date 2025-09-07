@@ -1,0 +1,281 @@
+// Supabase + Child Session Authentication
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { setAuthTokenGetter } from '@/lib/queryClient';
+
+interface AuthContextType {
+  user: any | null;
+  loading: boolean;
+  signOut: () => Promise<void>;
+  refreshChildSession?: () => Promise<void>;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Using singleton Supabase client from lib/supabase.ts
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [supabaseSession, setSupabaseSession] = useState<any>(null);
+
+  useEffect(() => {
+    // Get initial session - check both Supabase Auth and session-based auth
+    const getInitialSession = async () => {
+      try {
+        console.log('🔍 Checking for existing Supabase user session...');
+        
+        // First get the current Supabase session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session) {
+          console.log('✅ Supabase session found:', session.user.email);
+          setSupabaseSession(session);
+          
+          // Set auth token for API requests
+          setAuthTokenGetter(() => session.access_token);
+          
+          // Get full user data from our API
+          try {
+            const response = await fetch('/api/auth/user', {
+              headers: {
+                'Authorization': `Bearer ${session.access_token}`
+              }
+            });
+            
+            if (response.ok) {
+              const userData = await response.json();
+              console.log('✅ Supabase user data loaded:', userData.email);
+              setUser(userData);
+              setLoading(false);
+              return;
+            }
+          } catch (error) {
+            console.log('🔍 Error loading Supabase user data:', error);
+          }
+        }
+
+        // Check for child session (session-based auth)
+        console.log('🔍 Checking for child session...');
+        try {
+          const childResponse = await fetch('/api/child-auth/child-session-user', {
+            credentials: 'include'
+          });
+          
+          console.log('🔍 Child session response status:', childResponse.status);
+          
+          if (childResponse.ok) {
+            const childData = await childResponse.json();
+            console.log('🔍 Child session response data:', childData);
+            
+            if (childData.authenticated && childData.user) {
+              console.log('✅ Child session found:', childData.user.firstName);
+              const childUser = {
+                ...childData.user,
+                isChildUser: true // Flag to identify child users
+              };
+              setUser(childUser);
+              setLoading(false);
+              return;
+            }
+          } else {
+            console.log('🔍 Child session response not ok, status:', childResponse.status);
+          }
+        } catch (error) {
+          console.log('🔍 Child session check failed:', error);
+        }
+
+        // No Supabase auth, no child session found
+        console.log('🔍 No authentication found');
+        setUser(null);
+        setLoading(false);
+        
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        setUser(null);
+        setLoading(false);
+      }
+    };
+
+    getInitialSession();
+
+    // Listen for Supabase auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('🔄 Supabase auth state changed:', event);
+      
+      if (event === 'SIGNED_IN' && session) {
+        console.log('✅ User signed in via Supabase:', session.user.email);
+        setSupabaseSession(session);
+        setAuthTokenGetter(() => session.access_token);
+        
+        // Get full user data from our API
+        try {
+          const response = await fetch('/api/auth/user', {
+            headers: {
+              'Authorization': `Bearer ${session.access_token}`
+            }
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            console.log('✅ User data loaded after sign in:', userData.email);
+            setUser(userData);
+          }
+        } catch (error) {
+          console.log('❌ Error loading user data after sign in:', error);
+        }
+        setLoading(false);
+      } else if (event === 'SIGNED_OUT') {
+        console.log('✅ User signed out');
+        setUser(null);
+        setSupabaseSession(null);
+        setAuthTokenGetter(() => '');
+        setLoading(false);
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+
+    // Add a fallback check after a delay
+    const fallbackTimer = setTimeout(() => {
+      if (loading) {
+        console.log('🔄 Fallback: Checking for child session after delay...');
+        getInitialSession();
+      }
+    }, 1000);
+
+    return () => {
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
+
+  const signOut = async () => {
+    console.log('🚪 AuthContext signOut called');
+    console.log('🔍 Current user:', user);
+    console.log('🔍 Is child user?', user && (user as any).isChildUser);
+    
+    try {
+      // Check if this is a child user (session-based auth)
+      if (user && (user as any).isChildUser) {
+        console.log('📱 Child account logout - calling /api/auth/child-logout');
+        // Child account - use session logout
+        const response = await fetch('/api/auth/child-logout', {
+          method: 'POST',
+          credentials: 'include'
+        });
+        
+        console.log('📱 Child logout response:', response.status, response.ok);
+        
+        if (response.ok || response.redirected) {
+          console.log('✅ Child logout successful - clearing state');
+          // Clear local state
+          setUser(null);
+          // Clear React Query cache
+          const { queryClient } = await import('@/lib/queryClient');
+          queryClient.clear();
+          // Clear localStorage and sessionStorage
+          localStorage.clear();
+          sessionStorage.clear();
+          // Force redirect to home page
+          window.location.href = '/';
+        } else {
+          console.error('❌ Child logout failed:', response.status);
+        }
+      } else {
+        console.log('👥 Parent/Teacher account logout - calling Supabase logout');
+        // Parent/Teacher account - use Supabase logout
+        await supabase.auth.signOut();
+        // Clear local state and storage
+        setUser(null);
+        setSupabaseSession(null);
+        setAuthTokenGetter(() => "");
+        const { queryClient } = await import('@/lib/queryClient');
+        queryClient.clear();
+        localStorage.clear();
+        sessionStorage.clear();
+        // Navigate to home
+        window.location.href = '/';
+      }
+    } catch (error) {
+      console.error('Sign out error:', error);
+      console.log('🚨 Fallback logout - clearing everything');
+      // Fallback: clear everything and redirect
+      setUser(null);
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = '/';
+    }
+  };
+
+  // Function to refresh user data after important updates
+  const refreshUserData = async () => {
+    try {
+      const response = await fetch('/api/auth/user', {
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        if (userData.authenticated && userData.user) {
+          setUser(userData.user);
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing user data:', error);
+    }
+  };
+
+  const refreshChildSession = async () => {
+    try {
+      const response = await fetch('/api/child-auth/child-session-user', {
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const childData = await response.json();
+        if (childData.authenticated && childData.user) {
+          const childUser = {
+            ...childData.user,
+            isChildUser: true
+          };
+          setUser(childUser);
+        }
+      }
+    } catch (error) {
+      console.error('Error refreshing child session:', error);
+    }
+  };
+
+  // Set up auth token getter for API requests (Replit Auth only)
+  useEffect(() => {
+    setAuthTokenGetter(() => "");
+  }, []);
+
+  return (
+    <AuthContext.Provider 
+      value={{
+        user,
+        loading,
+        isLoading: loading,
+        isAuthenticated: !!user,
+        signOut,
+        refreshChildSession,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}
