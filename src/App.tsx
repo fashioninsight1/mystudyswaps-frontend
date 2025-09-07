@@ -165,7 +165,7 @@ function Router() {
   
   // 1. First priority: if user is authenticated and needs children setup
   if (user && needsChildrenSetup) {
-    return <ChildrenSetup //>;
+    return <ChildrenSetup />;
   }
   
   // 2. Second priority: if user needs basic profile onboarding
