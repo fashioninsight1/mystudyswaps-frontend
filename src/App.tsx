@@ -228,7 +228,6 @@ function Router() {
       />
     </div>
   );
-}
 
 function App() {
   useEffect(() => {
