@@ -1,3 +1,14 @@
+export {}; // This makes the file a module
+
+// Define the gtag function globally
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}
+
+// Rest of your code stays the same...
 // Define the gtag function globally
 declare global {
   interface Window {
