@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useRoleUpdate } from "@/hooks/useRoleUpdate";
 import { usePendingProfile } from "@/hooks/usePendingProfile";
 // import { initGA } from "@/lib/analytics";
@@ -261,10 +260,8 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
             // <Toaster />
             <Router />
-        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
