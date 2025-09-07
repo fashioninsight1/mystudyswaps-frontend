@@ -1,7 +1,7 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
+// import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useRoleUpdate } from "@/hooks/useRoleUpdate";
@@ -166,7 +166,7 @@ function Router() {
   
   // 1. First priority: if user is authenticated and needs children setup
   if (user && needsChildrenSetup) {
-    return <ChildrenSetup />;
+    return <ChildrenSetup //>;
   }
   
   // 2. Second priority: if user needs basic profile onboarding
@@ -176,75 +176,75 @@ function Router() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-secondary to-primary">
-      <Header />
+      <Header //>
       <Switch>
         {user && user.role === "student" ? (
-          <Route path="/" component={StudentDashboard} />
+          <Route path="/" component={StudentDashboard} //>
         ) : user && (user.role === "parent" || user.role === "home_educator") ? (
           <Route path="/">
             {() => (
               <SubscriptionGate user={user}>
-                <ParentDashboard />
+                <ParentDashboard //>
               </SubscriptionGate>
             )}
           </Route>
         ) : user && user.role === "teacher" ? (
-          <Route path="/" component={TeacherDashboard} />
+          <Route path="/" component={TeacherDashboard} //>
         ) : user ? (
           // Authenticated but no specific role - redirect to onboarding
-          <Route path="/" component={Landing} />
+          <Route path="/" component={Landing} //>
         ) : (
-          <Route path="/" component={Landing} />
+          <Route path="/" component={Landing} //>
         )}
         
         {/* Public Pages */}
-        <Route path="/about" component={About} />
-        <Route path="/contact" component={Contact} />
-        <Route path="/careers" component={Careers} />
-        <Route path="/press" component={Press} />
-        <Route path="/privacy" component={Privacy} />
-        <Route path="/terms" component={Terms} />
+        <Route path="/about" component={About} //>
+        <Route path="/contact" component={Contact} //>
+        <Route path="/careers" component={Careers} //>
+        <Route path="/press" component={Press} //>
+        <Route path="/privacy" component={Privacy} //>
+        <Route path="/terms" component={Terms} //>
 
 
-        <Route path="/refer" component={Refer} />
-        <Route path="/sitemap" component={Sitemap} />
-        <Route path="/blog" component={Blog} />
-        <Route path="/blog/:id" component={BlogPost} />
-        <Route path="/free-resources" component={FreeResources} />
+        <Route path="/refer" component={Refer} //>
+        <Route path="/sitemap" component={Sitemap} //>
+        <Route path="/blog" component={Blog} //>
+        <Route path="/blog/:id" component={BlogPost} //>
+        <Route path="/free-resources" component={FreeResources} //>
         
         {/* Auth Pages */}
-        <Route path="/auth/callback" component={AuthCallback} />
-        <Route path="/auth/reset-password" component={ResetPassword} />
+        <Route path="/auth/callback" component={AuthCallback} //>
+        <Route path="/auth/reset-password" component={ResetPassword} //>
         
         {/* Subscription Pages */}
-        <Route path="/subscription/subscribe" component={Subscribe} />
-        <Route path="/subscription/success" component={SubscriptionSuccess} />
-        <Route path="/subscription/cancel" component={SubscriptionCancel} />
+        <Route path="/subscription/subscribe" component={Subscribe} //>
+        <Route path="/subscription/success" component={SubscriptionSuccess} //>
+        <Route path="/subscription/cancel" component={SubscriptionCancel} //>
         
         {/* Onboarding Pages */}
-        <Route path="/onboarding" component={ChildrenSetup} />
-        <Route path="/onboarding/children-setup" component={ChildrenSetup} />
-        <Route path="/onboarding/plan-selection" component={PlanSelection} />
-        <Route path="/onboarding/payment-success" component={PaymentSuccess} />
-        <Route path="/onboarding/payment-cancel" component={PaymentCancel} />
+        <Route path="/onboarding" component={ChildrenSetup} //>
+        <Route path="/onboarding/children-setup" component={ChildrenSetup} //>
+        <Route path="/onboarding/plan-selection" component={PlanSelection} //>
+        <Route path="/onboarding/payment-success" component={PaymentSuccess} //>
+        <Route path="/onboarding/payment-cancel" component={PaymentCancel} //>
         
         {/* Login page for child accounts */}
-        <Route path="/login" component={LoginPage} />
+        <Route path="/login" component={LoginPage} //>
         
         {/* Dashboard route - simplified to prevent SSR issues */}
         <Route path="/dashboard" component={user && user.role === "student" ? StudentDashboard : 
                                             user && (user.role === "parent" || user.role === "home_educator") ? ParentDashboard :
                                             user && user.role === "teacher" ? TeacherDashboard : 
-                                            Landing} />
+                                            Landing} //>
         
-        <Route component={NotFound} />
+        <Route component={NotFound} //>
       </Switch>
       
       {/* Onboarding Modal */}
       <OnboardingModal 
         isOpen={showOnboarding}
         onComplete={() => setShowOnboarding(false)}
-      />
+      //>
     </div>
   );
 }
@@ -265,8 +265,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TooltipProvider>
-            <Toaster />
-            <Router />
+            // <Toaster //>
+            <Router //>
           </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
