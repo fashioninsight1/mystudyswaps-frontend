@@ -1,0 +1,817 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 40.78%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(0, 0%, 40.78%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 40.78%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 40.78%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(188, 94%, 42.9%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(249, 88%, 76.5%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(24, 95%, 61%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(188, 94%, 42.9%);
+  --radius: 0.5rem;
+  
+  /* My Study Swaps Brand Colors - From Brand Guidelines */
+  --brand-cyan: #06B6D4;
+  --brand-gray: #686868;
+  --brand-purple: #A78BFA;
+  --brand-orange: #FB923C;
+  --brand-white: #FFFFFF;
+  
+  /* Universal Colors - All Key Stages */
+  --error-red: #EF4444;
+  --info-blue: #3B82F6;
+  
+  /* Default Key Stage Colors (KS3/KS4 - Ages 11-16) */
+  --ks-primary: #A78BFA; /* Soft Purple */
+  --ks-secondary: #06B6D4; /* Vibrant Cyan */
+  --ks-accent: #FB923C; /* Vibrant Orange */
+  --ks-supporting: #686868; /* Neutral Gray */
+  --ks-achievement: #EAB308; /* Achievement Gold */
+  
+  /* Legacy education theme colors */
+  --primary-purple: hsl(243, 75%, 65%);
+  --secondary-purple: hsl(251, 63%, 69%);
+  --gradient-start: hsl(243, 75%, 65%);
+  --gradient-end: hsl(251, 63%, 69%);
+  --success: hsl(142, 76%, 36%);
+  --warning: hsl(38, 92%, 50%);
+  --info: hsl(199, 89%, 48%);
+}
+
+/* Mobile-first responsive optimizations */
+@media (max-width: 768px) {
+  /* Optimize video performance on mobile */
+  video {
+    transform: scale(1.05);
+    transform-origin: center;
+  }
+  
+  /* Improve mobile typography */
+  .mobile-hero-text {
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  /* Mobile CTA button optimizations */
+  .mobile-cta {
+    min-height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  
+  /* Ensure proper touch targets */
+  button, .btn, [role="button"] {
+    min-height: 44px;
+  }
+  
+  /* Mobile card optimizations */
+  .card {
+    border-radius: 12px;
+  }
+  
+  /* Mobile section padding */
+  .mobile-section {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Modal optimizations for mobile */
+@media (max-width: 640px) {
+  /* Modal dialog optimizations */
+  [role="dialog"] {
+    margin: 8px !important;
+    max-height: calc(100vh - 32px) !important;
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+    position: fixed !important;
+    top: 16px !important;
+    left: 8px !important;
+    transform: none !important;
+  }
+  
+  /* Dialog content padding */
+  .modal-content {
+    padding: 12px !important;
+  }
+  
+  /* Form labels and inputs */
+  .form-label {
+    font-size: 13px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  /* Select and input components - Enhanced for iPad/tablet */
+  [role="combobox"], input, textarea {
+    min-height: 44px !important;
+    font-size: 16px !important; /* Prevent zoom on iOS */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Ensure inputs are focusable on touch devices */
+  input:focus, textarea:focus, [role="combobox"]:focus {
+    outline: 2px solid #06B6D4 !important;
+    outline-offset: 2px !important;
+    border-color: #06B6D4 !important;
+  }
+  
+  /* Modal dialog improvements for tablet */
+  .dialog-content {
+    transform: none !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Button optimizations */
+  .mobile-btn {
+    min-height: 44px !important;
+    font-size: 14px !important;
+    padding: 8px 16px !important;
+  }
+  
+  /* Card optimizations */
+  .mobile-card {
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  /* Grid adjustments */
+  .mobile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+/* Tablet optimizations for iPad and similar devices */
+@media (min-width: 641px) and (max-width: 1024px) {
+  /* Enhanced input focus for tablet */
+  input, textarea, [role="combobox"] {
+    min-height: 48px !important;
+    font-size: 16px !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Ensure proper focus visibility */
+  input:focus, textarea:focus, [role="combobox"]:focus {
+    outline: 3px solid #06B6D4 !important;
+    outline-offset: 2px !important;
+    border-color: #06B6D4 !important;
+    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1) !important;
+  }
+  
+  /* Modal optimizations for tablet portrait/landscape */
+  [role="dialog"] {
+    max-width: 600px !important;
+    margin: 20px auto !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Button touch targets for tablet */
+  button, [role="button"] {
+    min-height: 48px !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* Viewport optimizations */
+@media (max-width: 480px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  /* Optimize small mobile screens */
+  .hero-video-mobile {
+    min-height: 70vh;
+  }
+  
+  /* Text sizing for small screens */
+  .mobile-text-sm {
+    font-size: 12px !important;
+  }
+  
+  .mobile-text-xs {
+    font-size: 11px !important;
+  }
+}
+
+/* Custom animations for landing page */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Enhanced mobile optimization for iPhone display */
+@media (max-width: 640px) {
+  /* Modal positioning to avoid iPhone notch */
+  .fixed.inset-0 {
+    padding-top: 1rem !important;
+  }
+  
+  /* Modal title mobile optimization */
+  .modal-title {
+    font-size: 0.75rem !important;
+    line-height: 1rem !important;
+    word-break: break-word;
+  }
+  
+  /* Subject grid cards mobile optimization */
+  .grid-cols-3 > * {
+    min-width: 0;
+    flex: 1;
+  }
+  
+  /* Button text wrapping for mobile */
+  button {
+    word-wrap: break-word !important;
+    hyphens: auto !important;
+    white-space: normal !important;
+    text-align: center !important;
+    line-height: 1.2 !important;
+  }
+  
+  /* Subject card button fixes */
+  .subject-card button {
+    padding: 0.25rem 0.125rem !important;
+    font-size: 0.6875rem !important;
+    min-height: 32px !important;
+  }
+  
+  /* AI recommendations mobile spacing */
+  .ai-recommendation-card {
+    padding: 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+  
+  /* Assessment buttons mobile layout */
+  .assessment-buttons {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+  }
+  
+  .assessment-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+  
+  /* Text truncation for mobile */
+  .mobile-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Card content mobile spacing */
+  .mobile-card-content {
+    padding: 0.75rem !important;
+  }
+  
+  /* Modal content padding adjustment */
+  .modal-content {
+    padding-top: 0.5rem !important;
+  }
+}
+
+/* Enhanced hover effects */
+.hover-lift:hover {
+  transform: translateY(-4px);
+  transition: transform 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(243, 75%, 65%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-gradient-to-br from-primary via-secondary to-primary;
+    font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+  }
+}
+
+/* KS1/KS2 Color Scheme (Ages 5-11 - Bright & Playful) */
+.ks1-ks2 {
+  --ks-primary: #FB923C; /* Vibrant Orange */
+  --ks-secondary: #06B6D4; /* Vibrant Cyan */
+  --ks-accent: #22C55E; /* Grass Green */
+  --ks-supporting: #A78BFA; /* Soft Purple */
+  --ks-achievement: #FFD700; /* Bright Gold */
+}
+
+/* KS3/KS4 Color Scheme (Ages 11-16 - Contemporary Cool) */
+.ks3-ks4 {
+  --ks-primary: #A78BFA; /* Soft Purple */
+  --ks-secondary: #06B6D4; /* Vibrant Cyan */
+  --ks-accent: #FB923C; /* Vibrant Orange */
+  --ks-supporting: #686868; /* Neutral Gray */
+  --ks-achievement: #EAB308; /* Achievement Gold */
+}
+
+/* KS5 Color Scheme (Ages 16-18 - Professional) */
+.ks5 {
+  --ks-primary: #2B5CE6; /* Primary Brand Blue */
+  --ks-secondary: #14B8A6; /* Brand Teal */
+  --ks-accent: #22C55E; /* Success Green */
+  --ks-supporting: #64748B; /* Neutral Gray */
+  --ks-achievement: #14B8A6; /* Brand Teal */
+}
+
+/* Parent & Teacher Color Scheme (Professional) */
+.parent-teacher {
+  --ks-primary: var(--brand-cyan);
+  --ks-secondary: var(--brand-gray);
+  --ks-accent: var(--brand-purple);
+  --ks-supporting: var(--brand-gray);
+  --ks-achievement: var(--brand-cyan);
+}
+
+@layer components {
+  /* Brand Color Utility Classes - My Study Swaps Brand Guidelines */
+  .brand-cyan-bg { background-color: var(--brand-cyan); }
+  .brand-cyan-text { color: var(--brand-cyan); }
+  .brand-cyan-border { border-color: var(--brand-cyan); }
+  
+  .brand-gray-bg { background-color: var(--brand-gray); }
+  .brand-gray-text { color: var(--brand-gray); }
+  .brand-gray-border { border-color: var(--brand-gray); }
+  
+  .brand-purple-bg { background-color: var(--brand-purple); }
+  .brand-purple-text { color: var(--brand-purple); }
+  .brand-purple-border { border-color: var(--brand-purple); }
+  
+  .brand-orange-bg { background-color: var(--brand-orange); }
+  .brand-orange-text { color: var(--brand-orange); }
+  .brand-orange-border { border-color: var(--brand-orange); }
+  
+  .error-red-bg { background-color: var(--error-red); }
+  .error-red-text { color: var(--error-red); }
+  .error-red-border { border-color: var(--error-red); }
+  
+  .info-blue-bg { background-color: var(--info-blue); }
+  .info-blue-text { color: var(--info-blue); }
+  .info-blue-border { border-color: var(--info-blue); }
+  
+  /* Key Stage Color Utility Classes */
+  .ks-primary-bg { background-color: var(--ks-primary); }
+  .ks-primary-text { color: var(--ks-primary); }
+  .ks-primary-border { border-color: var(--ks-primary); }
+  
+  .ks-secondary-bg { background-color: var(--ks-secondary); }
+  .ks-secondary-text { color: var(--ks-secondary); }
+  .ks-secondary-border { border-color: var(--ks-secondary); }
+  
+  .ks-accent-bg { background-color: var(--ks-accent); }
+  .ks-accent-text { color: var(--ks-accent); }
+  .ks-accent-border { border-color: var(--ks-accent); }
+  
+  .ks-supporting-bg { background-color: var(--ks-supporting); }
+  .ks-supporting-text { color: var(--ks-supporting); }
+  .ks-supporting-border { border-color: var(--ks-supporting); }
+  
+  .ks-achievement-bg { background-color: var(--ks-achievement); }
+  .ks-achievement-text { color: var(--ks-achievement); }
+  .ks-achievement-border { border-color: var(--ks-achievement); }
+  
+  /* Light background variants for better contrast */
+  .ks-primary-light-bg { background-color: color-mix(in srgb, var(--ks-primary) 10%, white); }
+  .ks-secondary-light-bg { background-color: color-mix(in srgb, var(--ks-secondary) 10%, white); }
+  .ks-accent-light-bg { background-color: color-mix(in srgb, var(--ks-accent) 10%, white); }
+  .ks-supporting-light-bg { background-color: color-mix(in srgb, var(--ks-supporting) 10%, white); }
+  
+  /* Key Stage Button Components */
+  .ks-btn-primary {
+    background-color: var(--ks-primary);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .ks-btn-primary:hover {
+    filter: brightness(0.9);
+  }
+  
+  .ks-btn-secondary {
+    background-color: var(--ks-secondary);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .ks-btn-secondary:hover {
+    filter: brightness(0.9);
+  }
+  
+  .ks-btn-accent {
+    background-color: var(--ks-accent);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+  }
+  
+  .ks-btn-accent:hover {
+    filter: brightness(0.9);
+  }
+  
+  /* Brand Buttons - My Study Swaps Brand Guidelines */
+  .brand-btn-cyan {
+    background-color: var(--brand-cyan);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+  }
+  
+  .brand-btn-cyan:hover {
+    filter: brightness(0.9);
+  }
+  
+  .brand-btn-purple {
+    background-color: var(--brand-purple);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+  }
+  
+  .brand-btn-purple:hover {
+    filter: brightness(0.9);
+  }
+  
+  .brand-btn-orange {
+    background-color: var(--brand-orange);
+    color: white;
+    border: none;
+    transition: all 0.2s ease;
+    font-family: 'Mulish', sans-serif;
+    font-weight: 600;
+  }
+  
+  .brand-btn-orange:hover {
+    filter: brightness(0.9);
+  }
+  
+  /* Progress Bar Styles */
+  .ks-progress-bar {
+    background-color: var(--ks-accent);
+  }
+  
+  .brand-progress-bar {
+    background-color: var(--brand-cyan);
+  }
+
+  /* Custom gradient backgrounds */
+  .gradient-bg {
+    @apply bg-gradient-to-br from-primary via-secondary to-primary;
+  }
+  
+  .gradient-card {
+    @apply bg-white/95 backdrop-blur-lg border border-white/20 shadow-lg;
+  }
+  
+  .glass-effect {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20;
+  }
+  
+  /* Custom button styles */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary text-white font-semibold hover:transform hover:scale-105 transition-all duration-200;
+  }
+  
+  /* Progress bar styles */
+  .progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+  }
+  
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500;
+  }
+  
+  /* Card hover effects */
+  .hover-lift {
+    @apply hover:transform hover:-translate-y-2 transition-all duration-300;
+  }
+  
+  .hover-scale {
+    @apply hover:transform hover:scale-105 transition-all duration-200;
+  }
+  
+  /* Subject color variations */
+  .subject-math {
+    @apply bg-blue-500;
+  }
+  
+  .subject-english {
+    @apply bg-purple-500;
+  }
+  
+  .subject-science {
+    @apply bg-green-500;
+  }
+  
+  .subject-history {
+    @apply bg-orange-500;
+  }
+  
+  .subject-geography {
+    @apply bg-teal-500;
+  }
+  
+  /* Achievement badge styles */
+  .achievement-badge {
+    @apply w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold;
+  }
+  
+  .achievement-gold {
+    @apply bg-yellow-100 text-yellow-600;
+  }
+  
+  .achievement-silver {
+    @apply bg-gray-100 text-gray-600;
+  }
+  
+  .achievement-bronze {
+    @apply bg-orange-100 text-orange-600;
+  }
+  
+  /* Streak and point displays */
+  .stat-display {
+    @apply text-center p-4 rounded-lg bg-white/20 backdrop-blur-sm;
+  }
+  
+  .stat-number {
+    @apply text-2xl font-bold;
+  }
+  
+  .stat-label {
+    @apply text-sm opacity-80;
+  }
+  
+  /* Loading animations */
+  .pulse-slow {
+    animation: pulse 3s infinite;
+  }
+  
+  .bounce-subtle {
+    animation: bounce 2s infinite;
+  }
+  
+  /* Custom focus states */
+  .focus-ring {
+    @apply focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary outline-none;
+  }
+  
+  /* Role selection cards */
+  .role-card {
+    @apply border-2 border-gray-200 rounded-xl p-4 text-center cursor-pointer transition-all duration-200;
+  }
+  
+  .role-card:hover,
+  .role-card.selected {
+    @apply border-primary transform scale-105;
+    background-color: hsl(var(--primary) / 0.05);
+  }
+  
+  /* Mobile responsive utilities */
+  .mobile-padding {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+  
+  .mobile-text {
+    @apply text-sm md:text-base;
+  }
+  
+  /* Dashboard specific styles */
+  .dashboard-card {
+    @apply bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300;
+  }
+  
+  .dashboard-header {
+    @apply bg-white rounded-2xl p-6 mb-8 shadow-lg;
+  }
+  
+  /* Recommendation card styles */
+  .recommendation-card {
+    @apply bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:border-primary transition-all duration-300;
+  }
+  
+  /* Subject progress card */
+  .subject-card {
+    @apply bg-white rounded-xl p-6 shadow-lg transition-all duration-300 hover:transform hover:-translate-y-1;
+  }
+}
+
+/* Custom animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate-fade-scale {
+  animation: fadeInScale 0.3s ease-out;
+}
+
+/* Glassmorphism effects */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.glass-dark {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Text gradients */
+.text-gradient {
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Fraction display formatting */
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0.25rem;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+}
+
+.fraction .numerator {
+  font-size: 0.9rem;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+.fraction .denominator {
+  font-size: 0.9rem;
+  line-height: 1;
+  padding-top: 2px;
+  border-top: 2px solid currentColor;
+}
+
+.fraction.large {
+  font-size: 1.1rem;
+}
+
+.fraction.large .numerator,
+.fraction.large .denominator {
+  font-size: 1rem;
+}
+
+/* Mobile viewport utilities for registration forms */
+.pb-safe-area-inset-bottom {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.h-safe-bottom-inset-only {
+  height: env(safe-area-inset-bottom);
+}
+
+/* Ensure mobile forms are scrollable and buttons stay visible */
+@media (max-height: 800px) and (max-width: 640px) {
+  .mobile-form-container {
+    min-height: 100vh;
+    padding-bottom: 120px;
+  }
+}
