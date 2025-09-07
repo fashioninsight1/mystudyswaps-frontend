@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useRoleUpdate } from "@/hooks/useRoleUpdate";
 import { usePendingProfile } from "@/hooks/usePendingProfile";
@@ -263,7 +262,6 @@ function App() {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <TooltipProvider>
             // <Toaster />
             <Router />
           </TooltipProvider>
