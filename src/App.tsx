@@ -156,6 +156,7 @@ function Router() {
   if (user && (user as any).needsOnboarding) {
     setShowOnboarding(true);
   }
+function MainComponent() {function MainComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary via-secondary to-primary">
@@ -246,6 +247,7 @@ function App() {
       </QueryClientProvider>
     </ErrorBoundary>
   );
+}
 }
 
 export default App;
