@@ -6,7 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { useRoleUpdate } from "@/hooks/useRoleUpdate";
 import { usePendingProfile } from "@/hooks/usePendingProfile";
-import { initGA } from "@/lib/analytics";
+// import { initGA } from "@/lib/analytics";
 import { useAnalytics } from "@/hooks/use-analytics";
 import { Header } from "@/components/header";
 import { OnboardingModal } from "@/components/onboarding-modal";
@@ -256,7 +256,7 @@ function App() {
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
       console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
-      initGA();
+      // initGA();
     }
   }, []);
 
