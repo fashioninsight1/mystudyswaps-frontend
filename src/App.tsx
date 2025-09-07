@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Header } from "@/components/header";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import ChildrenSetup from "@/pages/onboarding/ChildrenSetup";
 import PlanSelection from "@/pages/onboarding/PlanSelection";
