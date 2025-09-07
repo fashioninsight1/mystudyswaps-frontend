@@ -264,7 +264,6 @@ function App() {
         <AuthProvider>
             // <Toaster />
             <Router />
-          </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
