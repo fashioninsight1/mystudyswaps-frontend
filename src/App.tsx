@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-import ChildrenSetup from "@/pages/onboarding/ChildrenSetup";
 import PlanSelection from "@/pages/onboarding/PlanSelection";
 import PaymentSuccess from "@/pages/onboarding/PaymentSuccess";
 import PaymentCancel from "@/pages/onboarding/PaymentCancel";
@@ -134,7 +133,6 @@ function Router() {
   // CRITICAL FIX: Prevent infinite loops between plan selection and subscription gate
   const isOnPlanSelectionPage = window.location.pathname === '/onboarding/plan-selection';
   const childrenSetupJustCompleted = sessionStorage.getItem('childrenSetupComplete') === 'true';
-  const needsChildrenSetup = !childrenSetupJustCompleted && 
                             !isOnPlanSelectionPage && // Don't redirect if already on plan selection
                             (sessionStorage.getItem('needsOnboarding') === 'true' || 
                              (user && user.role === 'parent' && user.childrenSetupComplete === false));
@@ -145,7 +143,6 @@ function Router() {
       email: user.email,
       firstName: user.firstName,
       childrenSetupComplete: user.childrenSetupComplete,
-      needsChildrenSetup,
       sessionStorageFlag: sessionStorage.getItem('needsOnboarding')
     });
   }
@@ -153,8 +150,6 @@ function Router() {
 
   
   // 1. First priority: if user is authenticated and needs children setup
-  if (user && needsChildrenSetup) {
-    return <ChildrenSetup />;
   }
   
   // 2. Second priority: if user needs basic profile onboarding
@@ -210,8 +205,6 @@ function Router() {
         <Route path="/subscription/cancel" component={SubscriptionCancel} />
         
         {/* Onboarding Pages */}
-        <Route path="/onboarding" component={ChildrenSetup} />
-        <Route path="/onboarding/children-setup" component={ChildrenSetup} />
         <Route path="/onboarding/plan-selection" component={PlanSelection} />
         <Route path="/onboarding/payment-success" component={PaymentSuccess} />
         <Route path="/onboarding/payment-cancel" component={PaymentCancel} />
