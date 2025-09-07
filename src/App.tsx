@@ -1,7 +1,6 @@
 import { Switch, Route } from "wouter";
 import { queryClient, setAuthTokenGetter } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
-// import { initGA } from "@/lib/analytics";
 import { Header } from "@/components/header";
 import { OnboardingModal } from "@/components/onboarding-modal";
 import ChildrenSetup from "@/pages/onboarding/ChildrenSetup";
@@ -85,7 +84,6 @@ function Router() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   
   // Track page views when routes change
-  useAnalytics();
   
   // Initialize the auth token getter for the query client (not needed for child accounts)
   React.useEffect(() => {
@@ -242,11 +240,9 @@ function Router() {
 }
 
 function App() {
-  // Initialise Google Analytics when app loads
   useEffect(() => {
     // Verify required environment variable is present
     if (!import.meta.env.VITE_GA_MEASUREMENT_ID) {
-      console.warn('Missing required Google Analytics key: VITE_GA_MEASUREMENT_ID');
     } else {
       // initGA();
     }
